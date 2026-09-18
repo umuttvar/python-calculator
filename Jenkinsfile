@@ -36,6 +36,15 @@ pipeline{
                 echo "Bu, ${UYGULAMA_ADI} projesinin main branch'i"
             }
         }
+
+        stage('Sadece feature branch\'lerde calis') {
+            when {
+                branch 'feature/*'
+            }
+            steps {
+                echo "Bu bir FEATURE branch, sadece test amaçlı!"
+            }
+        }
     }
 
     post {
@@ -49,6 +58,5 @@ pipeline{
         echo "Pipeline tamamlandi!"
      }
     }
-    
 }
 
