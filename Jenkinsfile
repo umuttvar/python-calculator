@@ -36,6 +36,22 @@ pipeline{
                 echo "Bu, ${UYGULAMA_ADI} projesinin main branch'i"
             }
         }
+
+        stage ('Paralel Kontroller'){
+            parallel {
+                stage('Testleri calistir') {
+                    steps {
+                        sh 'python3 -m pytest test_calculator.py -v'
+                    }
+                }
+                stage('Syntax kontrolu') {
+                    steps {
+                    sh 'python3 -m py_compile calculator.py'
+                    echo 'Syntax Kontrolu tamamlandi'
+                    }
+                }
+            }
+        }
     }
 
     post {
