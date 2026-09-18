@@ -19,7 +19,7 @@ pipeline{
         
         stage ('Test et') {
             steps {
-                sh 'python3 -m pytest test_calculator.py -v'
+                sh 'python3 -m pytest test_calculator.py -v --junitxml=test-sonuclari.xml'
             }
         }
          stage ('Trigger testi') {
@@ -62,7 +62,8 @@ pipeline{
         echo "Build BASARISIZ OLDU ${UYGULAMA_ADI}"
      }
      always {
-        echo "Pipeline tamamlandi!"
+        junit 'test-sonuclari.xml'
+        archiveArtifacts artifacts : 'test-sonuclari.xml', fingerprint: true
      }
     }
     
