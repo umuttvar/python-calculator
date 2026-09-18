@@ -4,7 +4,7 @@ pipeline{
     }
 
     environment{
-        UYGULAMA_ADI = 'python_calculator'
+        UYGULAMA_ADI = 'python-k8s-agent'
     }
 
     triggers {
