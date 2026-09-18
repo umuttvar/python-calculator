@@ -2,6 +2,11 @@ pipeline{
     agent{
         label "python-agent"
     }
+
+    environment{
+        UYGULAMA_ADI = 'python_calculator'
+    }
+
     triggers {
         pollSCM('H/5 * * * *')
     }
@@ -17,12 +22,33 @@ pipeline{
                 sh 'python3 -m pytest test_calculator.py -v'
             }
         }
-
-        stage ('Trigger testi') {
+         stage ('Trigger testi') {
             steps {
                 sh 'echo Trigger Testi'
             }
         }
+
+        stage ('Sadece main branch\'te calis') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "Bu, ${UYGULAMA_ADI} projesinin main branch'i"
+            }
+        }
+    }
+
+    post {
+     success {
+        echo "Build BASARILLI ${UYGULAMA_ADI}"
+     }
+     failure {
+        echo "Build BASARISIZ OLDU ${UYGULAMA_ADI}"
+     }
+     always {
+        echo "Pipeline tamamlandi!"
+     }
     }
     
 }
+
