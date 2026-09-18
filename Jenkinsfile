@@ -2,6 +2,9 @@ pipeline{
     agent{
         label "python-agent"
     }
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
     stages{
         stage('Bağımlılıkları kur'){
             steps {
