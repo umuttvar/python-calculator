@@ -5,7 +5,7 @@ pipeline{
     stages{
         stage('Bağımlılıkları kur'){
             steps {
-                sh 'pip3 install pytest'
+                sh 'pip3 install pytest --break-system-packages'
             }
         }
         stage ('Test et') {
