@@ -11,9 +11,16 @@ pipeline{
                 sh 'pip3 install pytest --break-system-packages'
             }
         }
+        
         stage ('Test et') {
             steps {
                 sh 'python3 -m pytest test_calculator.py -v'
+            }
+        }
+
+        stage ('Trigger testi') {
+            steps {
+                sh 'echo Trigger Testi'
             }
         }
     }
