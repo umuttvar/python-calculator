@@ -1,10 +1,10 @@
 pipeline{
     agent{
-        label "python-agent"
+        label "python-k8s-agent"
     }
 
     environment{
-        UYGULAMA_ADI = 'python-k8s-agent'
+        UYGULAMA_ADI = 'python_calculator'
     }
 
     triggers {
