@@ -32,7 +32,7 @@ pipeline {
             steps {
                 sh 'python3 -m py_compile calculator.py'
                 echo 'Syntax Kontrolu tamamlandi'
-                sh 'eco BU DOCKER agentta calisti'
+                sh 'echo BU DOCKER agentta calisti'
                 sh 'hostname'
             }
 
