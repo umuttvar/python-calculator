@@ -15,12 +15,27 @@ pipeline {
                 label 'python-k8s-agent'
             }
             steps {
-                sh '''
+                 sh '''
                     pip3 install pytest --break-system-packages
                     python3 -m pytest test_calculator.py -v --junitxml=test-sonuclari.xml
                 '''
+                sh 'echo Bu KUBERNETES agentta calisti'
+                sh 'hostname'
                 junit 'test-sonuclari.xml'
             }
+        }
+
+        stage ('Docker Agent - Syntax Kontrolu') {
+            agent {
+                label 'python-agent'
+            }
+            steps {
+                sh 'python3 -m py_compile calculator.py'
+                echo 'Syntax Kontrolu tamamlandi'
+                sh 'eco BU DOCKER agentta calisti'
+                sh 'hostname'
+            }
+
         }
     }
 
