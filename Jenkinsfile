@@ -1,71 +1,35 @@
-pipeline{
-    agent{
-        label "python-k8s-agent"
-    }
+pipeline {
+    agent none
 
-    environment{
+    environment {
         UYGULAMA_ADI = 'python_calculator'
     }
 
     triggers {
         pollSCM('H/5 * * * *')
     }
-    stages{
-        stage('Bağımlılıkları kur'){
-            steps {
-                sh 'pip3 install pytest --break-system-packages'
-            }
-        }
-        
-        stage ('Test et') {
-            steps {
-                sh 'python3 -m pytest test_calculator.py -v --junitxml=test-sonuclari.xml'
-            }
-        }
-         stage ('Trigger testi') {
-            steps {
-                sh 'echo Trigger Testi'
-            }
-        }
 
-        stage ('Sadece main branch\'te calis') {
-            when {
-                branch 'main'
+    stages {
+        stage('Bagimliliklari kur') {
+            agent {
+                label 'python-k8s-agent'
             }
             steps {
-                echo "Bu, ${UYGULAMA_ADI} projesinin main branch'i"
-            }
-        }
-
-        stage ('Paralel Kontroller'){
-            parallel {
-                stage('Testleri calistir') {
-                    steps {
-                        sh 'python3 -m pytest test_calculator.py -v'
-                    }
-                }
-                stage('Syntax kontrolu') {
-                    steps {
-                    sh 'python3 -m py_compile calculator.py'
-                    echo 'Syntax Kontrolu tamamlandi'
-                    }
-                }
+                sh '''
+                    pip3 install pytest --break-system-packages
+                    python3 -m pytest test_calculator.py -v --junitxml=test-sonuclari.xml
+                '''
+                junit 'test-sonuclari.xml'
             }
         }
     }
 
     post {
-     success {
-        echo "Build BASARILLI ${UYGULAMA_ADI}"
-     }
-     failure {
-        echo "Build BASARISIZ OLDU ${UYGULAMA_ADI}"
-     }
-     always {
-        junit 'test-sonuclari.xml'
-        archiveArtifacts artifacts : 'test-sonuclari.xml', fingerprint: true
-     }
+        success {
+            echo "Build BASARILI ${UYGULAMA_ADI}"
+        }
+        failure {
+            echo "Build BASARISIZ OLDU ${UYGULAMA_ADI}"
+        }
     }
-    
 }
-
